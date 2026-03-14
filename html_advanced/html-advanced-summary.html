@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الدليل الشامل لـ HTML المتقدم - الشغل المعلم</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&family=Fira+Code:wght@400;500&display=swap');
+
+        :root {
+            --bg-main: #0d1117;
+            --bg-card: #161b22;
+            --bg-hover: #21262d;
+            --text-main: #c9d1d9;
+            --text-muted: #8b949e;
+            --accent-primary: #58a6ff;
+            --accent-success: #2ea043;
+            --accent-warning: #f1e05a;
+            --border-color: #30363d;
+            --code-bg: #010409;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.7;
+            display: flex;
+        }
+
+        /* Sidebar Navigation */
+        nav.sidebar {
+            width: 280px;
+            background-color: var(--bg-card);
+            border-left: 1px solid var(--border-color);
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            padding: 30px 20px;
+            overflow-y: auto;
+        }
+
+        .sidebar h2 {
+            color: var(--accent-primary);
+            font-weight: 800;
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(88, 166, 255, 0.3);
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar li a {
+            display: block;
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .sidebar li a:hover {
+            background-color: var(--bg-hover);
+            color: var(--text-main);
+            transform: translateX(-5px);
+            border-right: 3px solid var(--accent-primary);
+        }
+
+        /* Main Content */
+        main.content {
+            flex: 1;
+            padding: 50px 80px;
+            max-width: 1200px;
+        }
+
+        header.page-header {
+            margin-bottom: 50px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+        }
+
+        header.page-header h1 {
+            font-size: 2.8rem;
+            color: #fff;
+        }
+
+        header.page-header p {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+        }
+
+        /* Sections & Cards */
+        section.topic-section {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 35px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        section.topic-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 32px rgba(88, 166, 255, 0.15);
+            border-color: var(--accent-primary);
+        }
+
+        .topic-section h2 {
+            color: var(--accent-primary);
+            border-bottom: 2px dashed var(--border-color);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+        }
+
+        .topic-section h3 {
+            color: #fff;
+            margin: 25px 0 15px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .topic-section h3::before {
+            content: "/>";
+            color: var(--accent-success);
+            font-family: 'Fira Code', monospace;
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        /* Code Blocks & Copy Button */
+        .code-container {
+            position: relative;
+            margin: 20px 0;
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            overflow-x: auto;
+            direction: ltr;
+            text-align: left;
+        }
+
+        code {
+            font-family: 'Fira Code', monospace;
+            color: var(--accent-warning);
+            font-size: 0.95rem;
+        }
+
+        code.inline {
+            background-color: rgba(241, 224, 90, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--accent-warning);
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--bg-hover);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            padding: 5px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            background-color: var(--accent-primary);
+            color: #fff;
+            border-color: var(--accent-primary);
+        }
+
+        /* Visual Examples */
+        .example-box {
+            background-color: rgba(255, 255, 255, 0.03);
+            border: 1px dashed var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background-color: var(--bg-main);
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            text-align: left;
+            direction: ltr;
+        }
+
+        th {
+            background-color: var(--bg-hover);
+            color: var(--accent-primary);
+        }
+
+        details {
+            background-color: var(--code-bg);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 10px;
+        }
+
+        summary {
+            cursor: pointer;
+            color: var(--accent-success);
+            font-weight: bold;
+            outline: none;
+            user-select: none;
+        }
+
+        summary:hover {
+            color: var(--accent-primary);
+        }
+
+        mark {
+            background-color: rgba(241, 224, 90, 0.3);
+            color: #fff;
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+
+        blockquote {
+            border-right: 4px solid var(--accent-primary);
+            background-color: rgba(88, 166, 255, 0.05);
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 4px 0 0 4px;
+            font-style: italic;
+        }
+
+        cite {
+            display: block;
+            margin-top: 10px;
+            color: var(--accent-success);
+            font-weight: bold;
+            font-style: normal;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-main);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+
+    </style>
+</head>
+<body>
+
+    <nav class="sidebar">
+        <h2>فهرس المرجع</h2>
+        <ul>
+            <li><a href="#semantic">1. الهيكلة الدلالية (Semantic)</a></li>
+            <li><a href="#typography">2. النصوص والاقتباسات</a></li>
+            <li><a href="#lists">3. أنواع القوائم</a></li>
+            <li><a href="#tables">4. الجداول المتقدمة</a></li>
+            <li><a href="#interactive">5. العناصر التفاعلية</a></li>
+            <li><a href="#media">6. الوسائط (صور، فيديو، صوت)</a></li>
+            <li><a href="#iframe">7. التضمين الخارجي (Iframe)</a></li>
+        </ul>
+    </nav>
+
+    <main class="content">
+        <header class="page-header">
+            <h1>الدليل الشامل لـ HTML المتقدم 🚀</h1>
+            <p>توثيق تفصيلي لجميع المهارات والوسوم الدلالية المكتسبة في مشاريع الـ Front-End.</p>
+        </header>
+
+        <section id="semantic" class="topic-section">
+            <h2>1. الهيكلة الدلالية (Semantic Tags)</h2>
+            <p>تكمن قوة الـ HTML الحديثة في استخدام وسوم تصف <strong>معنى</strong> المحتوى وليس شكله. هذا يفيد محركات البحث (SEO) وقارئات الشاشة (Accessibility).</p>
+            
+            <h3>الوسوم الأساسية</h3>
+            <ul>
+                <li><code class="inline">&lt;header&gt;</code>: ترويسة الصفحة أو القسم، تحتوي غالباً على الشعار وعنوان رئيسي.</li>
+                <li><code class="inline">&lt;nav&gt;</code>: حاوية لروابط التنقل الرئيسية (Navigation).</li>
+                <li><code class="inline">&lt;main&gt;</code>: المحتوى الأساسي والفريد للصفحة (يجب أن يكون هناك واحد فقط لكل صفحة).</li>
+                <li><code class="inline">&lt;section&gt;</code>: جزء مستقل من المحتوى يحتوي على ترويسة خاصة به (مثل قسم "من نحن" أو "الخدمات").</li>
+                <li><code class="inline">&lt;article&gt;</code>: محتوى قائم بذاته يمكن قراءته مستقلاً عن باقي الصفحة (مثل مقالة مدونة أو بطاقة منتج).</li>
+                <li><code class="inline">&lt;footer&gt;</code>: التذييل، ويحتوي على حقوق النشر، الروابط الثانوية، ومعلومات التواصل.</li>
+            </ul>
+
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode(this)">نسخ الكود</button>
+<pre><code>&lt;!-- مثال لهيكلة صفحة نموذجية --&gt;
+&lt;header&gt;
+    &lt;nav&gt;...&lt;/nav&gt;
+&lt;/header&gt;
+&lt;main&gt;
+    &lt;section id="hero"&gt;...&lt;/section&gt;
+    &lt;section id="news"&gt;
+        &lt;article&gt;مقال 1&lt;/article&gt;
+        &lt;article&gt;مقال 2&lt;/article&gt;
+    &lt;/section&gt;
+&lt;/main&gt;
+&lt;footer&gt;...&lt;/footer&gt;</code></pre>
+            </div>
+        </section>
+
+        <section id="typography" class="topic-section">
+            <h2>2. النصوص والاقتباسات (Typography)</h2>
+            <p>كيفية التعامل مع النصوص بشكل احترافي لإبراز المعلومات، الاقتباسات، والأكواد البرمجية.</p>
+
+            <h3>الوسوم النصية المتخصصة</h3>
+            <div class="example-box">
+                <p>استخدام <code class="inline">&lt;address&gt;</code> للعناوين الحقيقية:</p>
+                <address>234 Washington Street<br>Urbana, Illinois</address>
+                <hr style="border-color: #333; margin: 15px 0;">
+                
+                <p>استخدام <code class="inline">&lt;mark&gt;</code> لتمييز <mark>نص مهم جداً</mark> (Highlight).</p>
+                <p>استخدام <code class="inline">&lt;small&gt;</code> للحقوق أو الملاحظات الجانبية: <small>By Author Name</small>.</p>
+            </div>
+
+            <h3>الاقتباسات</h3>
+            <div class="example-box">
+                <p><strong>الاقتباس الخطي <code class="inline">&lt;q&gt;</code>:</strong> <q>Stay hungry. Stay foolish.</q></p>
+                <p><strong>الاقتباس المستقل <code class="inline">&lt;blockquote&gt;</code> مع <code class="inline">&lt;cite&gt;</code>:</strong></p>
+                <blockquote>
+                    I am completely blown away. Thanks to Techium, we've just launched our 5th website!
+                    <cite>Yuri Y.</cite>
+                </blockquote>
+            </div>
+
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode(this)">نسخ الكود</button>
+<pre><code>&lt;blockquote&gt;
+    نص الاقتباس الطويل يوضع هنا...
+    &lt;cite&gt;اسم القائل أو المصدر&lt;/cite&gt;
+&lt;/blockquote&gt;</code></pre>
+            </div>
+        </section>
+
+        <section id="lists" class="topic-section">
+            <h2>3. أنواع القوائم (Lists)</h2>
+            <p>لا يقتصر الأمر على القوائم النقطية والرقمية، بل يمتد لقوائم المصطلحات والتعريفات.</p>
+
+            <div class="example-box">
+                <h3>قائمة غير مرتبة <code class="inline">&lt;ul&gt;</code></h3>
+                <ul>
+                    <li>عنصر نقطي أول</li>
+                    <li>عنصر نقطي ثاني</li>
+                </ul>
+
+                <h3>قائمة مرتبة <code class="inline">&lt;ol&gt;</code></h3>
+                <ol>
+                    <li>الخطوة الأولى</li>
+                    <li>الخطوة الثانية</li>
+                </ol>
+
+                <h3>قائمة التعريف <code class="inline">&lt;dl&gt;</code></h3>
+                <p>ممتازة للمصطلحات ومعانيها، أو الأسئلة الشائعة.</p>
+                <dl>
+                    <dt style="color: var(--accent-success); font-weight: bold;">المصطلح (Term - dt)</dt>
+                    <dd>هنا يوضع تعريف المصطلح أو شرحه (Description - dd).</dd>
+                    <dt style="color: var(--accent-success); font-weight: bold;">HTML</dt>
+                    <dd>لغة هيكلة صفحات الويب.</dd>
+                </dl>
+            </div>
+        </section>
+
+        <section id="tables" class="topic-section">
+            <h2>4. الجداول المتقدمة (Tables & Accessibility)</h2>
+            <p>بناء الجداول لا يكتمل إلا باستخدام سمة <code class="inline">scope="col"</code> و <code class="inline">scope="row"</code> لتوضيح اتجاه البيانات لبرامج قراءة الشاشة.</p>
+
+            <div class="example-box">
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">Title</th>
+                            <th scope="col">Director</th>
+                            <th scope="col">Release Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">Star Wars: Episode IV</th>
+                            <td>George Lucas</td>
+                            <td>May 25, 1977</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Star Wars: Episode V</th>
+                            <td>Irvin Kershner</td>
+                            <td>May 21, 1980</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode(this)">نسخ الكود</button>
+<pre><code>&lt;table&gt;
+    &lt;thead&gt;
+        &lt;tr&gt;
+            &lt;th scope="col"&gt;العنوان (عنوان عمود)&lt;/th&gt;
+        &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+        &lt;tr&gt;
+            &lt;th scope="row"&gt;اسم الفيلم (عنوان صف)&lt;/th&gt;
+            &lt;td&gt;بيانات عادية&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/tbody&gt;
+&lt;/table&gt;</code></pre>
+            </div>
+        </section>
+
+        <section id="interactive" class="topic-section">
+            <h2>5. العناصر التفاعلية (Details & Summary)</h2>
+            <p>وسوم أصلية في HTML5 لإنشاء قوائم قابلة للطي (Accordion) بدون كتابة سطر جافاسكريبت واحد!</p>
+
+            <div class="example-box">
+                <details>
+                    <summary>اضغط هنا للكشف عن التفاصيل (مغلق افتراضياً)</summary>
+                    <p style="margin-top: 10px; color: var(--text-muted);">هذا النص مخفي ولا يظهر إلا عند الضغط على العنوان.</p>
+                </details>
+
+                <details open>
+                    <summary>مفتوح دائماً (باستخدام سمة open)</summary>
+                    <p style="margin-top: 10px; color: var(--text-muted);">هذا القسم يظهر مفتوحاً بمجرد تحميل الصفحة.</p>
+                </details>
+            </div>
+        </section>
+
+        <section id="media" class="topic-section">
+            <h2>6. الوسائط (صور، فيديو، صوت)</h2>
+            <p>الطريقة الصحيحة لإدراج الوسائط مع ضمان الأداء والوصولية.</p>
+
+            <h3>الصور <code class="inline">&lt;img&gt;</code></h3>
+            <p>يجب دائماً توفير <code class="inline">alt</code> للوصف، و <code class="inline">width</code> / <code class="inline">height</code> لمنع اهتزاز الصفحة أثناء التحميل (Layout Shifts).</p>
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode(this)">نسخ الكود</button>
+<pre><code>&lt;img src="images/logo.png" alt="Techium Logo" width="160" height="40"&gt;</code></pre>
+            </div>
+
+            <h3>الفيديو <code class="inline">&lt;video&gt;</code> والصوت <code class="inline">&lt;audio&gt;</code></h3>
+            <p>أهم السمات: <code class="inline">controls</code> لإظهار الأزرار، <code class="inline">loop</code> للتكرار، و <code class="inline">poster</code> لصورة الغلاف قبل التشغيل.</p>
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode(this)">نسخ الكود</button>
+<pre><code>&lt;video src="movie.mp4" controls loop poster="thumb.jpg"&gt;
+    Sorry, your browser doesn't support HTML5 video
+&lt;/video&gt;
+
+&lt;audio src="music.mp3" controls&gt;
+    Sorry, your browser doesn't support audio element
+&lt;/audio&gt;</code></pre>
+            </div>
+        </section>
+
+        <section id="iframe" class="topic-section">
+            <h2>7. التضمين الخارجي (Iframe)</h2>
+            <p>يستخدم لإدراج صفحة داخل صفحتك، ممتاز لخرائط جوجل ومقاطع اليوتيوب.</p>
+
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode(this)">نسخ الكود</button>
+<pre><code>&lt;iframe 
+    title="Holberton School Video" 
+    width="350" 
+    height="200" 
+    src="https://www.youtube.com/embed/41N6bKO-NVI"&gt;
+    Fallback text for browsers that don't support iframes.
+&lt;/iframe&gt;</code></pre>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        function copyCode(button) {
+            // البحث عن الكود داخل نفس الحاوية
+            const codeBlock = button.parentElement.querySelector('code');
+            const textToCopy = codeBlock.innerText;
+
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const originalText = button.innerText;
+                button.innerText = 'تم النسخ! ✅';
+                button.style.backgroundColor = 'var(--accent-success)';
+                button.style.color = '#fff';
+                
+                setTimeout(() => {
+                    button.innerText = originalText;
+                    button.style.backgroundColor = '';
+                    button.style.color = '';
+                }, 2000);
+            }).catch(err => {
+                console.error('فشل النسخ: ', err);
+            });
+        }
+    </script>
+</body>
+</html>
