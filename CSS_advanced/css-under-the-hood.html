@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>البنية التحتية لـ CSS: توثيق هندسي ومعماري</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --surface-color: #161b22;
+            --border-color: #30363d;
+            --text-main: #c9d1d9;
+            --text-muted: #8b949e;
+            --accent-color: #58a6ff;
+            --code-bg: #010409;
+            --string-color: #a5d6ff;
+            --keyword-color: #ff7b72;
+            --comment-color: #8b949e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.8;
+            padding: 2rem;
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            color: var(--accent-color);
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title::before {
+            content: "■";
+            font-size: 1rem;
+        }
+
+        .concept-block {
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .code-snippet {
+            background-color: var(--code-bg);
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            direction: ltr;
+            text-align: left;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 0.95rem;
+            overflow-x: auto;
+        }
+
+        .code-snippet .keyword { color: var(--keyword-color); }
+        .code-snippet .property { color: var(--string-color); }
+        .code-snippet .value { color: #79c0ff; }
+        .code-snippet .comment { color: var(--comment-color); font-style: italic; }
+
+        .explanation {
+            padding: 1.5rem;
+        }
+
+        .explanation h3 {
+            font-size: 1.2rem;
+            color: #ffffff;
+            margin-bottom: 1rem;
+        }
+
+        .explanation p {
+            margin-bottom: 1rem;
+            color: var(--text-main);
+        }
+
+        .explanation strong {
+            color: #ffffff;
+        }
+
+        .explanation code {
+            background-color: rgba(110, 118, 129, 0.4);
+            padding: 0.2em 0.4em;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>البنية التحتية لـ CSS (Under the Hood)</h1>
+        <p class="subtitle">التوثيق المعماري الدقيق لكيفية تفاعل محرك تصيير المتصفح (Rendering Engine) مع الأوامر المنخفضة المستوى (Low-level) للـ CSS، بعيداً عن التجريد وإطارات العمل.</p>
+
+        <h2 class="section-title">1. نموذج الصندوق والرياضيات (The Box Model Engine)</h2>
+
+        <div class="concept-block">
+            <div class="code-snippet">
+<span class="keyword">*</span>, <span class="keyword">*::before</span>, <span class="keyword">*::after</span> {
+  <span class="property">box-sizing</span>: <span class="value">border-box</span>;
+}
+            </div>
+            <div class="explanation">
+                <h3>إعادة برمجة حسابات المتصفح (Override Default Calculations)</h3>
+                <p><strong>الميكانيكية:</strong> الوضع الافتراضي للمتصفح (<code>content-box</code>) يقوم بحساب العرض الفيزيائي للعنصر كالتالي: العرض المكتوب + مساحة الـ Padding + مساحة الـ Border. هذا يكسر أي نظام شبكي (Grid) يعتمد على النسب المئوية لأن العنصر يتمدد للخارج.</p>
+                <p>الأمر <code>border-box</code> يتدخل في خوارزمية الرسم (Painting Algorithm) ويجبر المحرك على استيعاب الـ Padding والـ Border <strong>نحو الداخل</strong>. إذا أعطيت العنصر عرض 33.33%، سيبقى فيزيائياً 33.33% من الشاشة بغض النظر عن الحشوات الداخلية، مما يضمن دقة الرياضيات في الشبكات.</p>
+            </div>
+        </div>
+
+        <h2 class="section-title">2. المتغيرات وبيئة التشغيل (Runtime Evaluation)</h2>
+
+        <div class="concept-block">
+            <div class="code-snippet">
+<span class="keyword">:root</span> {
+  <span class="property">--color-primary</span>: <span class="value">#d73953</span>;
+}
+<span class="keyword">[data-section-theme="dark"]</span> {
+  <span class="property">--bg-color</span>: <span class="value">#000000</span>;
+}
+            </div>
+            <div class="explanation">
+                <h3>التقييم الديناميكي ونطاق المتغيرات (Scope & Dynamic Repaint)</h3>
+                <p><strong>الميكانيكية:</strong> خصائص CSS المخصصة (Custom Properties) تختلف جذرياً عن متغيرات SASS. المتغير هنا ليس نصوصاً تُستبدل قبل التشغيل، بل هو عقدة حية (Live Node) في نموذج كائنات CSS (CSSOM).</p>
+                <p>الـ <code>:root</code> يزرع المتغير في أعلى هرم الـ DOM. ولكن عندما نستخدم <code>[data-section-theme="dark"]</code> لإعادة تعريف المتغير، يقوم المتصفح فوراً بعملية <strong>Repaint</strong> (إعادة تلوين بكسلات الشاشة) للأبناء دون الحاجة لإجراء <strong>Reflow</strong> (إعادة حساب أبعاد الصفحة)، مما يجعل هذه الطريقة الأكثر كفاءة (Performant) هندسياً لبناء وضع ليلي (Dark Mode).</p>
+            </div>
+        </div>
+
+        <h2 class="section-title">3. هندسة الشبكات القديمة (Legacy Grid & Flow Detachment)</h2>
+
+        <div class="concept-block">
+            <div class="code-snippet">
+<span class="keyword">[class*="col-"]</span> {
+  <span class="property">float</span>: <span class="value">left</span>;
+  <span class="property">width</span>: <span class="value">33.33%</span>;
+}
+            </div>
+            <div class="explanation">
+                <h3>الفصل عن التدفق (Detaching from Normal Flow)</h3>
+                <p><strong>الميكانيكية:</strong> محدد السمة <code>[class*="col-"]</code> هو أداة بحث (Regex-like) تستهدف أي عنصر يحتوي كلاسه على هذه السلسلة. الأمر <code>float</code> يقوم حرفياً بسحب العنصر من خوارزمية الترتيب العمودي الطبيعي (Block Formatting Context) للمتصفح، ويدفعه لأقصى اليسار، مما يسمح للعناصر الأخرى بالتكدس بجانبه بناءً على النسب المئوية.</p>
+            </div>
+        </div>
+
+        <div class="concept-block">
+            <div class="code-snippet">
+<span class="keyword">.row::after</span> {
+  <span class="property">content</span>: <span class="value">""</span>;
+  <span class="property">display</span>: <span class="value">table</span>;
+  <span class="property">clear</span>: <span class="value">both</span>;
+}
+            </div>
+            <div class="explanation">
+                <h3>تنظيف الذاكرة البصرية (The Clearfix Hack)</h3>
+                <p><strong>الميكانيكية:</strong> لأن الـ <code>float</code> يفصل العناصر عن التدفق، العنصر الأب (<code>.row</code>) يعتقد رياضياً أنه لا يحتوي على أبناء، فينهار ارتفاعه إلى <code>0px</code>. هذا الانهيار يدمر بقية تخطيط الصفحة.</p>
+                <p>الحل هو حقن عنصر زائف (Virtual Element) في نهاية الأب. الأمر <code>clear: both</code> يخبر محرك التصيير: "ممنوع تواجد أي عنصر طافٍ بجانب هذا العنصر". وبما أننا جعلناه <code>display: table</code> (ليأخذ العرض كاملاً)، فإنه يُجبر الأب على التمدد للأسفل لابتلاع جميع أبنائه الطافيين، مما يعيد الاستقرار للشبكة.</p>
+            </div>
+        </div>
+
+        <h2 class="section-title">4. التموضع واختراق الـ DOM (Positioning & Virtual Nodes)</h2>
+
+        <div class="concept-block">
+            <div class="code-snippet">
+<span class="keyword">.card-work</span> {
+  <span class="property">position</span>: <span class="value">relative</span>;
+}
+<span class="keyword">.card-inner</span> {
+  <span class="property">position</span>: <span class="value">absolute</span>;
+  <span class="property">top</span>: <span class="value">0</span>; <span class="property">bottom</span>: <span class="value">0</span>; <span class="property">left</span>: <span class="value">0</span>; <span class="property">right</span>: <span class="value">0</span>;
+}
+            </div>
+            <div class="explanation">
+                <h3>سياق التموضع وتمدد الإحداثيات (Positioning Context & Stretch)</h3>
+                <p><strong>الميكانيكية:</strong> <code>position: absolute</code> يمحو العنصر تماماً من حسابات المساحة. ولكي لا يطير العنصر ليعتمد على الشاشة بالكامل (Viewport)، نستخدم <code>position: relative</code> في الأب. هذا الأمر لا يغير مكان الأب، لكنه يزرع <strong>نقطة ارتكاز إحداثية (Coordinate Origin)</strong> للأبناء.</p>
+                <p>الخدعة المعمارية هنا هي إعطاء الـ (Top, Bottom, Left, Right) جميعها قيمة صفر. هذا يخلق تناقضاً رياضياً يُجبر محرك المتصفح على تمطيط (Stretch) العنصر المطلق ليغطي 100% من مساحة الأب دون استخدام خصائص الـ Width والـ Height.</p>
+            </div>
+        </div>
+
+        <div class="concept-block">
+            <div class="code-snippet">
+<span class="keyword">.card-title a::after</span> {
+  <span class="property">content</span>: <span class="value">""</span>;
+  <span class="property">position</span>: <span class="value">absolute</span>;
+  <span class="property">top</span>: <span class="value">0</span>; <span class="property">bottom</span>: <span class="value">0</span>; <span class="property">left</span>: <span class="value">0</span>; <span class="property">right</span>: <span class="value">0</span>;
+}
+            </div>
+            <div class="explanation">
+                <h3>توسيع منطقة النقر (Hit-Testing Override)</h3>
+                <p><strong>الميكانيكية:</strong> بدلاً من الاعتماد على الجافاسكريبت لجعل البطاقة بأكملها قابلة للنقر، نقوم بحقن عنصر زائف (Virtual Node) داخل الرابط <code>&lt;a&gt;</code> ونعطيه تموضعاً مطلقاً يمتد ليغطي البطاقة الأم بالكامل. خوارزمية التقاط النقرات (Hit-Testing) في المتصفح ستسجل أي نقرة على هذه الطبقة الشفافة وتمررها مباشرة للرابط، مما يعزز تجربة المستخدم (UX) بكود نظيف جداً.</p>
+            </div>
+        </div>
+
+        <div class="concept-block">
+            <div class="code-snippet">
+<span class="keyword">.card-quote::before</span> {
+  <span class="property">content</span>: <span class="value">"\201C"</span>;
+  <span class="property">z-index</span>: <span class="value">-1</span>;
+}
+            </div>
+            <div class="explanation">
+                <h3>العمق السلبي والتسلسل الهرمي للطبقات (Z-Axis Stacking Context)</h3>
+                <p><strong>الميكانيكية:</strong> الـ DOM ثنائي الأبعاد (X, Y). خاصية <code>z-index</code> تتدخل في المحور الثالث (Z-axis) للتحكم في الطبقات. القيمة <code>-1</code> تقوم بترحيل العنصر إلى طبقة خلفية رياضياً خلف محتوى العنصر الأصلي. هذا يضمن أن علامة الاقتباس التجميلية لن تمنع المتصفح من تحديد النص (Text Selection) أو حجب النقرات.</p>
+            </div>
+        </div>
+
+        <h2 class="section-title">5. التسريع العتادي والفيزياء (Hardware Acceleration & Physics)</h2>
+
+        <div class="concept-block">
+            <div class="code-snippet">
+<span class="keyword">.card-image img</span> {
+  <span class="property">transition</span>: <span class="value">transform 0.3s cubic-bezier(0.17, 0.67, 0, 1.01)</span>;
+}
+<span class="keyword">.card-work:hover .card-image img</span> {
+  <span class="property">transform</span>: <span class="value">scale(1.2)</span>;
+}
+            </div>
+            <div class="explanation">
+                <h3>تجاوز المعالج إلى كرت الشاشة (Bypassing CPU via GPU Compositing)</h3>
+                <p><strong>الميكانيكية:</strong> تكبير صورة باستخدام <code>width</code> و <code>height</code> يجبر المعالج (CPU) على إعادة حساب التخطيط (Reflow) لكل عناصر الصفحة، مما يسبب تقطيعاً (Jank) في الأداء. الأمر <code>transform</code> مختلف تماماً؛ فهو يمرر العملية مباشرة إلى كرت الشاشة (GPU) في مرحلة التجميع (Compositing Phase).</p>
+                <p><strong>منحنى بيزيه (Cubic-Bezier):</strong> بدلاً من الحركة الخطية الجامدة، هذه الدالة الرياضية ترسم منحنى للسرعة على محورين (الوقت مقابل التقدم). القيمة <code>1.01</code> تعني أن الحركة ستتجاوز الهدف النهائي رياضياً بنسبة 1% قبل أن ترتد للخلف (Snap back)، مما يخلق إحساساً فيزيائياً عضوياً (Organic physics) للتأثير.</p>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
